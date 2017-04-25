@@ -7,6 +7,7 @@ This is a temporary script file.
 
 from textblob import TextBlob
 import praw
+import numpy as np
 
 #Access Reddit API and authenticate bot through OAuth2 
 redditinstance = praw.Reddit(client_id='EBLOq3xVjVAuBA',
@@ -19,35 +20,32 @@ redditinstance = praw.Reddit(client_id='EBLOq3xVjVAuBA',
 print(redditinstance.read_only)
 print(redditinstance.user.me())
 
-#Obtaining /r/wholesomememes as my target subreddit instance and a quick check to make sure
+#Put the subreddit and keyword that you want to search for here
+#Maybe do a regex to find different/specific data within the comments
+SUBREDDIT = "pcmasterrace"
+KEYWORD = "nvidia"
+
+#Obtaining /r/cars as my target subreddit instance and a quick check to make sure
     # that everything works
-subreddit = redditinstance.subreddit('wholesomememes')
+subreddit = redditinstance.subreddit(SUBREDDIT)
 print(subreddit.display_name)
 print(subreddit.title)
 
-#This is leftover from using the live connection with reddit
+#Getting all comments in SUBREDDIT that mention KEYWORD to analyze
 commentslist = []
-for comment in redditinstance.subreddit('wholesomememes').comments(limit=60):
-    commentslist.append(comment.body)
+for comment in redditinstance.subreddit(SUBREDDIT).comments(limit=5000):
+    if KEYWORD in comment.body:
+        commentslist.append(comment.body)
+        
+blobbin = []
+for s in commentslist:
+    blobbin.append(TextBlob(s))
 
-#Using textblob to do semantic analysis on each comment, finding the comments
-    # that are more subjective than objective, and adding them to a list which
-    # we then calculate the average of to compare against other subreddits.
+#Sentiment analysis info
+sentiment = []    
+for x in blobbin:
+    sentiment.append(x.sentiment.polarity)
+print "The average sentiment polarity of", KEYWORD, "is", np.average(sentiment), "pulled from", len(commentslist), "comments."
+    
 
-Subredditlist = []
-#Automate searching through my prepopulated list of subreddits
-def sentianalyze(Subreddit):
-    bloblist = []
-    sentiset = []
-    for x in commentslist:
-        bloblist.append(TextBlob(x))    
-        for comment in bloblist:
-            if comment.sentiment.subjectivity > 0:
-                sentiset.append(comment.sentiment.polarity)        
-def mean(numbers):
-    return float(sum(numbers)) / max(len(numbers), 1) 
-print mean(sentiset)  
-
-
-  
 
