@@ -28,7 +28,7 @@ KEYWORD = "nvidia"
 #Obtaining /r/cars as my target subreddit instance and a quick check to make sure
     # that everything works
 subreddit = redditinstance.subreddit(SUBREDDIT)
-print(subreddit.display_name)
+print "You are currently querying the subreddit:", subreddit.display_name, ", please wait..."
 print(subreddit.title)
 
 #Getting all comments in SUBREDDIT that mention KEYWORD to analyze
@@ -47,5 +47,5 @@ for x in blobbin:
     sentiment.append(x.sentiment.polarity)
 print "The average sentiment polarity of", KEYWORD, "is", np.average(sentiment), "pulled from", len(commentslist), "comments."
     
-
+#Be careful with requests, too many comment requests and you'll get a 429 error code.
 
