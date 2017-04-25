@@ -21,12 +21,10 @@ print(redditinstance.read_only)
 print(redditinstance.user.me())
 
 #Put the subreddit and keyword that you want to search for here
-#Maybe do a regex to find different/specific data within the comments
 SUBREDDIT = "pcmasterrace"
 KEYWORD = "nvidia"
 
-#Obtaining /r/cars as my target subreddit instance and a quick check to make sure
-    # that everything works
+#Obtaining target subreddit instance and a quick check to make sure that everything works
 subreddit = redditinstance.subreddit(SUBREDDIT)
 print "You are currently querying the subreddit:", subreddit.display_name, ", please wait..."
 print(subreddit.title)
